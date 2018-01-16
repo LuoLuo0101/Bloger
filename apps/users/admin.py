@@ -3,7 +3,6 @@ from users.models import *
 
 admin.site.register(Group)
 admin.site.register(Permission)
-admin.site.register(ContentType)
 admin.site.register(UserProfile)
 admin.site.register(UserGroup)
 admin.site.register(GroupPermission)

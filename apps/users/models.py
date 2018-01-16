@@ -17,30 +17,15 @@ class Group(BaseModel):
 
 
 class Permission(BaseModel):
-    name = models.CharField(verbose_name="权限名", max_length=100)
-    content_type_id = models.IntegerField(verbose_name="内容类型id")
+    name = models.CharField(verbose_name="权限名", max_length=100, unique=True)
     desc = models.CharField(verbose_name="权限描述", max_length=200)
 
     class Meta:
         verbose_name = verbose_name_plural = "权限表"
-        unique_together = ("name", "content_type_id")
         db_table = "permission"
 
     def __str__(self):
         return self.name
-
-
-class ContentType(BaseModel):
-    app_name = models.CharField(verbose_name="APP名", max_length=100)
-    url_name = models.CharField(verbose_name="路由名", max_length=100)
-
-    class Meta:
-        verbose_name = verbose_name_plural = "内容表"
-        unique_together = ("app_name", "url_name")
-        db_table = "content_type"
-
-    def __str__(self):
-        return "App名：" + self.app_name + ", 路由：" + self.url_name
 
 
 class UserProfile(AbstractUser):

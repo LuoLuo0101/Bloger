@@ -28,3 +28,21 @@ class CreateObjectError(CustomException):
     """
     创建对象失败
     """
+
+
+class CreateInfoEmptyError(CustomException):
+    """
+    创建对象的参数为空
+    """
+
+
+class DeleteObjectError(CustomException):
+    """
+    删除对象失败
+    """
+
+
+class UpdateObjectError(CustomException):
+    """
+    更新对象失败
+    """

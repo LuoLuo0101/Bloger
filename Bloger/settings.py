@@ -52,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'common.response_middleware.OutputMiddleWare',  # 处理输出格式化的中间件
 ]
 
 ROOT_URLCONF = 'Bloger.urls'
@@ -77,7 +78,7 @@ WSGI_APPLICATION = 'Bloger.wsgi.application'
 
 
 # 数据库相关配置
-mysql_conf = conf["mysql"]
+mysql_conf = conf["local"]
 
 DATABASES = {
     'default': {
@@ -138,9 +139,19 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         # JWT
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-    )
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        # second, minute, hour or day
+        'anon': '2/minute',
+        'user': '1000/day',
+        'normal_anon': '10/day'
+    }
 }
 
+# 设置缓存刷新时间，5秒
+REST_FRAMEWORK_EXTENSIONS = {
+    'DEFAULT_CACHE_RESPONSE_TIMEOUT': 5
+}
 
 # 设置自定义的登录
 AUTHENTICATION_BACKENDS = (

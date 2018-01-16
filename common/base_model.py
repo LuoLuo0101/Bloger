@@ -16,14 +16,15 @@ from common.exceptions import ObjectNotExistError, MultipleObjectsReturnedError
 
 class BaseManager(Manager):
 
-    def create_one_obj(self, db_select=None, **kwargs):
+    def create_one_obj(self, db_select=None, create_info=None):
         """
         创建一个对象
         :param db_select: 读写分离
-        :param kwargs: 创建对象的信息
+        :param create_info: 创建对象的信息
         :return: 返回一个obj对象
         """
-        obj = self.db_manager(using=db_select).model(**kwargs)
+        create_info = dict() if create_info is None or (not isinstance(create_info, dict)) else dict(create_info)
+        obj = self.db_manager(using=db_select).model(**create_info)
         obj.save()
         return obj
 
@@ -41,6 +42,10 @@ class BaseManager(Manager):
         update_info = {
             "is_delete": 1
         }
+        f_args = tuple() if f_args is None or (not isinstance(f_args, (tuple, set, list))) else tuple(f_args)
+        e_args = tuple() if e_args is None or (not isinstance(e_args, (tuple, set, list))) else tuple(e_args)
+        f_kwargs = dict() if f_kwargs is None or (not isinstance(f_kwargs, dict)) else dict(f_kwargs)
+        e_kwargs = dict() if e_kwargs is None or (not isinstance(e_kwargs, dict)) else dict(e_kwargs)
         obj_list = self.db_manager(using=db_select) \
             .filter(*f_args, **f_kwargs) \
             .exclude(*e_args, **e_kwargs)
@@ -67,6 +72,10 @@ class BaseManager(Manager):
         update_info = {
             "is_delete": 1
         }
+        f_args = tuple() if f_args is None or (not isinstance(f_args, (tuple, set, list))) else tuple(f_args)
+        e_args = tuple() if e_args is None or (not isinstance(e_args, (tuple, set, list))) else tuple(e_args)
+        f_kwargs = dict() if f_kwargs is None or (not isinstance(f_kwargs, dict)) else dict(f_kwargs)
+        e_kwargs = dict() if e_kwargs is None or (not isinstance(e_kwargs, dict)) else dict(e_kwargs)
         rows = self.db_manager(using=db_select) \
             .filter(*f_args, **f_kwargs) \
             .exclude(*e_args, **e_kwargs) \
@@ -74,7 +83,7 @@ class BaseManager(Manager):
         return rows
 
     def update_one_obj(self, db_select=None, f_args=None, f_kwargs=None,
-                       e_args=None, e_kwargs=None, **update_info):
+                       e_args=None, e_kwargs=None, update_info=None):
         """
         更新单个数据
         :param db_select: 读写分离
@@ -85,6 +94,11 @@ class BaseManager(Manager):
         :param update_info: 修改的信息
         :return: 返回修改的行数
         """
+        f_args = tuple() if f_args is None or (not isinstance(f_args, (tuple, set, list))) else tuple(f_args)
+        e_args = tuple() if e_args is None or (not isinstance(e_args, (tuple, set, list))) else tuple(e_args)
+        f_kwargs = dict() if f_kwargs is None or (not isinstance(f_kwargs, dict)) else dict(f_kwargs)
+        e_kwargs = dict() if e_kwargs is None or (not isinstance(e_kwargs, dict)) else dict(e_kwargs)
+        update_info = dict() if update_info is None or (not isinstance(update_info, dict)) else dict(update_info)
         obj_list = self.db_manager(using=db_select) \
             .filter(*f_args, **f_kwargs) \
             .exclude(*e_args, **e_kwargs)
@@ -108,6 +122,11 @@ class BaseManager(Manager):
         :param update_info: 修改的信息
         :return: 返回修改的行数
         """
+        f_args = tuple() if f_args is None or (not isinstance(f_args, (tuple, set, list))) else tuple(f_args)
+        e_args = tuple() if e_args is None or (not isinstance(e_args, (tuple, set, list))) else tuple(e_args)
+        f_kwargs = dict() if f_kwargs is None or (not isinstance(f_kwargs, dict)) else dict(f_kwargs)
+        e_kwargs = dict() if e_kwargs is None or (not isinstance(e_kwargs, dict)) else dict(e_kwargs)
+        update_info = dict() if update_info is None or (not isinstance(update_info, dict)) else dict(update_info)
         rows = self.db_manager(using=db_select) \
             .filter(*f_args, **f_kwargs) \
             .exclude(*e_args, **e_kwargs) \
@@ -122,6 +141,8 @@ class BaseManager(Manager):
         :param kwargs: 查询参数
         :return: 返回一个obj对象
         """
+        args = tuple() if args is None or (not isinstance(args, (tuple, set, list))) else tuple(args)
+        kwargs = dict() if kwargs is None or (not isinstance(kwargs, dict)) else dict(kwargs)
         try:
             obj = self.db_manager(using=db_select).get(*args, **kwargs)
         except ObjectDoesNotExist as e:
@@ -145,7 +166,14 @@ class BaseManager(Manager):
         :param order_by: 排序，元组类型
         :return: 返回批量数据
         """
-        obj_list = self.db_manager(db_select) \
+        f_args = tuple() if f_args is None or (not isinstance(f_args, (tuple, set, list))) else tuple(f_args)
+        e_args = tuple() if e_args is None or (not isinstance(e_args, (tuple, set, list))) else tuple(e_args)
+        s_fields = tuple() if s_fields is None or (not isinstance(s_fields, (tuple, set, list))) else tuple(s_fields)
+        o_fields = tuple() if o_fields is None or (not isinstance(o_fields, (tuple, set, list))) else tuple(o_fields)
+        order_by = tuple() if order_by is None or (not isinstance(order_by, (tuple, set, list))) else tuple(order_by)
+        f_kwargs = dict() if f_kwargs is None or (not isinstance(f_kwargs, dict)) else dict(f_kwargs)
+        e_kwargs = dict() if e_kwargs is None or (not isinstance(e_kwargs, dict)) else dict(e_kwargs)
+        obj_list = self.db_manager(using=db_select) \
             .filter(*f_args, **f_kwargs) \
             .exclude(*e_args, **e_kwargs) \
             .order_by(*order_by) \
@@ -176,7 +204,7 @@ class BaseModel(models.Model):
     update_time = models.DateTimeField(auto_now=True, verbose_name="更新时间")
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
 
-    object = BaseManager()
+    objects = BaseManager()
 
     class Meta:
         abstract = True

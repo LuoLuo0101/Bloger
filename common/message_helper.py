@@ -5,8 +5,12 @@
 # @File    : message_helper.py
 # @Software: PyCharm
 
+from rest_framework import status
 
-def genernal_message(code, msg, data):
+
+def genernal_message(code=status.HTTP_200_OK, msg="", data=None):
+    if not isinstance(data, dict):
+        data = dict()
     info = {
         "msg": msg,
         "code": code,

@@ -21,5 +21,6 @@ urlpatterns = [
     # 上传的文件配置
     url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
 
+    # user模块
     url(r'^users/', include('users.urls', namespace='users'))
 ]
