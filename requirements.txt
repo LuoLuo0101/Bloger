@@ -9,7 +9,7 @@ django-crispy-forms==1.7.0
 django-filter==1.1.0
 django-guardian==1.4.9
 django-redis==4.8.0
-djangorestframework==3.7.3
+djangorestframework==3.11.2
 djangorestframework-jwt==1.11.0
 drf-extensions==0.3.1
 idna==2.6
